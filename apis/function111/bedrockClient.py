@@ -55,16 +55,16 @@ load_dotenv()
 
 def invoke_bedrock_data_automation(image_s3_uri, output_base_s3_uri):
     blueprints={
-    "poa_sign.pdf":'arn:aws:bedrock:us-east-1:943143228843:blueprint/cfded66e2534',
-    "title.pdf":"arn:aws:bedrock:us-east-1:943143228843:blueprint/af53ca55f1a3",
-    "Used_Car_Trade.pdf":"arn:aws:bedrock:us-east-1:943143228843:blueprint/4b2f9dea25d4"
+    "poa_sign.pdf":'arn:aws:bedrock:us-east-1:050752609444:blueprint/c6c8017c5f2c',
+    # "title.pdf":"arn:aws:bedrock:us-east-1:943143228843:blueprint/af53ca55f1a3",
+    "Used_Car_Trade.pdf":"arn:aws:bedrock:us-east-1:050752609444:blueprint/f2e2f4d28403"
     }
     final_version='1'
     if image_s3_uri.endswith('poa_sign.pdf'):
         final_blueprint=blueprints['poa_sign.pdf']
-        final_version='2'
-    elif image_s3_uri.endswith('title.pdf'):
-        final_blueprint=blueprints['title.pdf']
+        final_version='1'
+    # elif image_s3_uri.endswith('title.pdf'):
+    #     final_blueprint=blueprints['title.pdf']
     elif image_s3_uri.endswith('Used_Car_Trade.pdf'):
         final_blueprint=blueprints['Used_Car_Trade.pdf']
 
@@ -91,7 +91,7 @@ def invoke_bedrock_data_automation(image_s3_uri, output_base_s3_uri):
                 'stage': 'LIVE'
             },
         ],
-        dataAutomationProfileArn='arn:aws:bedrock:us-east-1:943143228843:data-automation-profile/us.data-automation-v1'
+        dataAutomationProfileArn='arn:aws:bedrock:us-east-1:050752609444:data-automation-profile/us.data-automation-v1'
     )
  
     invocation_arn = response['invocationArn']

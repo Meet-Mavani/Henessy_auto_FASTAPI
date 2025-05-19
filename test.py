@@ -1,47 +1,36 @@
-# import streamlit as st
-# import boto3
-# import os
-# from botocore.exceptions import NoCredentialsError
-
-# # S3 configuration
-# S3_BUCKET = 'bucket-for-henessy'
-# S3_REGION = 'us-east-1'  # e.g., 'us-east-1'
-
-# # Initialize S3 client
-# s3_client = boto3.client('s3', region_name=S3_REGION)
-
-
-# def upload_to_s3(file, filename):
-#     try:
-#         s3_client.upload_fileobj(file, S3_BUCKET, filename)
-#         return True
-#     except NoCredentialsError:
-#         st.error("AWS credentials not found.")
-#         return False
-#     except Exception as e:
-#         st.error(f"Error uploading file: {e}")
-#         return False
-
-# # Streamlit UI
-# st.title("📁 File Uploader to S3")
-# uploaded_file = st.file_uploader("Choose a file", type=None)
-# if uploaded_file is not None:
-#     st.write("File name:", uploaded_file.name)
-#     s3_key=f"results/{uploaded_file.name}"
-    
-#     uploaded_url=f's3://bucket-for-henessy/{s3_key}'
-#     if st.button("Upload to S3"):
-#         with st.spinner("Uploading..."):
-#             success = upload_to_s3(uploaded_file, s3_key)
-#             if success:
-#                 st.write(f"this is the S3 URL:{uploaded_url}")
-#                 st.success(f"✅ Uploaded {uploaded_file.name} to S3 bucket '{S3_BUCKET}'")
-
-
 import boto3
-session = boto3.Session()
-credentials = session.get_credentials()
-frozen_creds = credentials.get_frozen_credentials()
-print("Access Key:", frozen_creds.access_key)
-print("Secret Key:", frozen_creds.secret_key)
-print("Session Token:", frozen_creds.token)
+
+def download_file_from_s3(bucket_name, object_key, local_file_path):
+    """
+    Download a file from an S3 bucket
+    
+    Parameters:
+        bucket_name (str): Name of the S3 bucket
+        object_key (str): The key of the object in the S3 bucket (file path)
+        local_file_path (str): Local path where the file will be saved
+    
+    Returns:
+        bool: True if download was successful, False otherwise
+    """
+    try:
+        # Create an S3 client
+        s3_client = boto3.client('s3')
+        
+        # Download the file
+        s3_client.download_file(bucket_name, object_key, local_file_path)
+        
+        print(f"Successfully downloaded {object_key} to {local_file_path}")
+        return True
+    
+    except Exception as e:
+        print(f"Error downloading file: {e}")
+        return False
+
+# Example usage
+if __name__ == "__main__":
+    # Replace these with your actual values
+    bucket = "bda-input-bucket-9876"
+    s3_file_key = "sahil3/title.pdf"
+    download_path = "C:/Users/MeetMavani/Desktop/Henessy Auto POC/Code_of_FASTAPI/files"
+    
+    download_file_from_s3(bucket, s3_file_key, download_path)
